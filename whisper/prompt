@@ -1,0 +1,15 @@
+A speech to text transcriber using OpenAI's whisper API
+Command line application
+Listens for the codeword "Whisper" to start transcribing the spoken text
+Listens for the codeword "Bye Bye" to end listening
+If no words are spoken for 5 seconds, the program will go to idle mode
+all required keys and tokens are stored in a .env file
+load the .env file using the dotenv library
+write down full code with comments and explanations
+document the code using docstrings
+Use openai library to access the whisper API
+Use the speech_recognition library to access the microphone
+Use the dotenv library to access the .env file
+Use the os library to access the operating system
+Do not leave function definitions empty or with pass
+Recheck the code for any errors or incomplete code

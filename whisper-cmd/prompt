@@ -1,0 +1,18 @@
+A text to ChatGPT to speech using using OpenAI's API
+Command line application
+Waits for the command
+Then the command is sent to the chatbot API
+The chatbot API returns a response
+The response is then spoken out loud
+Use best python-text-to-speech library to speak the response
+The codeword "Skip" is used to skip the current response and go to idle state
+The codeword "Whisper" is used to start listening again
+The program also listens for the codeword "Bye Bye" to end listening
+all required keys and tokens are stored in a .env file
+load the .env file using the dotenv library
+write down full code with comments and explanations
+Use openai library to access the whisper API
+Use the speech_recognition library to access the microphone
+Use the dotenv library to access the .env file
+Do not leave function definitions empty or with pass
+Recheck the code for any errors or incomplete code

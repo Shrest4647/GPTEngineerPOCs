@@ -1,0 +1,8 @@
+a tic tac toe game using pygame library
+modular code using functions
+AI opponent using minimax algorithm
+Ability to play against friend or AI
+save state of game and game history to sqlite database
+Able to play with different board sizes
+Score board to keep track of wins and losses
+Best of 3 or 5 games

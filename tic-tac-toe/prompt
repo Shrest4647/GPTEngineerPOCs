@@ -1,0 +1,21 @@
+Tic-Tac-Toe game AI using the minimax algorithm.
+Implemented using python
+Must be able to play against the player
+Three possible board moves: X, O, or E (Empty)
+Board state should be represented as a string of 9 characters (3x3 board) consisting of X, O, or E
+Should be able to configure three levels of difficulty
+Easy: AI makes random moves
+Medium: AI makes random moves, but blocks the player from winning
+Hard: AI uses the minimax algorithm to determine the best move
+Class signature as follows: """
+class AI:
+    def __init__(self, name, symbol):
+        self.name = name
+        self.symbol = symbol
+
+    def get_best_move(self, board_state):
+        # Implement minimax algorithm to determine the best move
+        pass
+"""
+
+

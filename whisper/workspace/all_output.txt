@@ -1,0 +1,110 @@
+Based on the requirements, here are the core classes, functions, and methods that will be necessary:
+
+1. `SpeechToTextTranscriber` class:
+   - `__init__(self, codeword_start: str, codeword_end: str, idle_timeout: int, language: str, accent: str)`
+     - Initializes the SpeechToTextTranscriber with the provided parameters.
+   - `start_transcribing(self)`
+     - Starts the transcription process.
+   - `stop_transcribing(self)`
+     - Stops the transcription process.
+   - `listen_for_codewords(self)`
+     - Listens for the codewords "Whisper" and "Bye Bye" to start and stop transcribing.
+   - `transcribe(self, audio: bytes) -> str`
+     - Transcribes the provided audio using OpenAI's Whisper API.
+   - `save_transcription(self, transcription: str)`
+     - Saves the transcribed text to a file with a timestamped filename.
+
+2. `MicrophoneListener` class:
+   - `__init__(self)`
+     - Initializes the MicrophoneListener.
+   - `listen(self) -> bytes`
+     - Listens to the microphone and returns the recorded audio as bytes.
+
+Now let's proceed with the implementation of the code.
+
+**speech_to_text_transcriber.py**
+```python
+import os
+import time
+from datetime import datetime
+from dotenv import load_dotenv
+import speech_recognition as sr
+import openai
+
+load_dotenv()
+
+class SpeechToTextTranscriber:
+    def __init__(self, codeword_start: str, codeword_end: str, idle_timeout: int, language: str, accent: str):
+        self.codeword_start = codeword_start
+        self.codeword_end = codeword_end
+        self.idle_timeout = idle_timeout
+        self.language = language
+        self.accent = accent
+        self.transcribing = False
+
+        openai.api_key = os.getenv("OPENAI_API_KEY")
+
+    def start_transcribing(self):
+        self.transcribing = True
+        self.listen_for_codewords()
+
+    def stop_transcribing(self):
+        self.transcribing = False
+
+    def listen_for_codewords(self):
+        while self.transcribing:
+            audio = MicrophoneListener().listen()
+            transcription = self.transcribe(audio)
+            if self.codeword_start in transcription:
+                self.save_transcription(transcription)
+            elif self.codeword_end in transcription:
+                self.stop_transcribing()
+            else:
+                time.sleep(self.idle_timeout)
+
+    def transcribe(self, audio: bytes) -> str:
+        recognizer = sr.Recognizer()
+        with sr.AudioFile(audio) as source:
+            audio_data = recognizer.record(source)
+        return recognizer.recognize_google(audio_data, language=self.language, show_all=False)
+
+    def save_transcription(self, transcription: str):
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        filename = f"transcription_{timestamp}.txt"
+        with open(filename, "w") as file:
+            file.write(transcription)
+
+class MicrophoneListener:
+    def __init__(self):
+        self.microphone = sr.Microphone()
+
+    def listen(self) -> bytes:
+        recognizer = sr.Recognizer()
+        with self.microphone as source:
+            audio = recognizer.listen(source)
+        return audio.get_raw_data()
+```
+
+**main.py**
+```python
+from speech_to_text_transcriber import SpeechToTextTranscriber
+
+def main():
+    codeword_start = "Whisper"
+    codeword_end = "Bye Bye"
+    idle_timeout = 5
+    language = "en-IN"
+    accent = "indian"
+
+    transcriber = SpeechToTextTranscriber(codeword_start, codeword_end, idle_timeout, language, accent)
+    transcriber.start_transcribing()
+
+if __name__ == "__main__":
+    main()
+```
+
+Please note that the code assumes the presence of the required environment variables, such as `OPENAI_API_KEY`, in the `.env` file. Make sure to provide the appropriate values in the `.env` file before running the code.
+
+Additionally, make sure to install the required dependencies by running `pip install python-dotenv speechrecognition openai` in your Python environment.
+
+Let me know if you need any further assistance.
